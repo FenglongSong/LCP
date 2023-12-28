@@ -25,6 +25,7 @@ class LinearComplementarityProblem:
         self.basic_var_indecies = [*range(0, self.n)]
         self.status = 0
         self.lexico_tol = 1e-6
+        self.zero_tol = 1e-10
 
     def initialize_tableau(self) -> None:
         n = self.n
@@ -62,7 +63,7 @@ class LinearComplementarityProblem:
                 ratios = np.ones(self.n)
                 q = self.tableau[:, -1]
                 for j in range(self.n):
-                    if abs(self.tableau[j, pivot_col_index]) < sys.float_info.epsilon: # ! if the value=0, not sure if this is a good way
+                    if abs(self.tableau[j, pivot_col_index]) < self.zero_tol:
                         ratios[j] = np.inf
                     else:
                         ratios[j] = q[j] / self.tableau[j, pivot_col_index]
