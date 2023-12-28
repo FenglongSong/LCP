@@ -26,7 +26,7 @@ class LinearComplementarityProblem:
         self.status = 0
         self.lexico_tol = 1e-6
 
-    def initialize_tablaeu(self) -> None:
+    def initialize_tableau(self) -> None:
         n = self.n
         self.tableau[:, 0:n] = np.eye(self.n)
         self.tableau[:, n:2*n] = -self.M
@@ -38,7 +38,7 @@ class LinearComplementarityProblem:
             print("LCP solved!")
             return self.q, np.zeros((self.n,1))
         else:
-            self.initialize_tablaeu()
+            self.initialize_tableau()
             # first pivot (the z0 column)                
             pivot_row_index = np.argmin(self.q) # ! should be replaced to avoid cycle pivoting
             # ! what happens if there're two elements in q which are equivalent
