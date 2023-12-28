@@ -1,21 +1,21 @@
 import numpy as np
 import matplotlib.pyplot as plt
-import sys
-'''
-w - Mz = q,
-w, z >= 0,
-w^T z = 0.
-
-status:
-    0: unsolved (initial state)
-    1: feasible solution found
-    2: ray termination
-    3: infeasible
-    4: max iteration reached
-
-'''
 
 class LinearComplementarityProblem:
+    """
+    Define the Linear Complementarity Problem (LCP).
+    w - Mz = q,
+    w, z >= 0,
+    w^T z = 0.
+
+    status:
+        0: unsolved (initial state)
+        1: feasible solution found
+        2: ray termination
+        3: infeasible
+        4: max iteration reached
+
+    """
     def __init__(self, M, q) -> None:
         self.M = M
         self.q = q
