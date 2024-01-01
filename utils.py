@@ -41,15 +41,15 @@ def lexico_argmin(matrix: np.array, zero_tol=1e-10) -> int | list[int]:
       """ Find the index of lexico minimum of a matrix.
       
       The lexico minimum of a set of vectors {a[1], a[2],..., a[m]} is the vector a[j] satisfying
-      that (a[i] - a[j]) is lexico positive for all i in {1,2,...,m}.
+      that (a[i] - a[j]) is lexico positive for all i in {1,2,...,m}/{j}.
 
       Args:
             matrix: a ndarray of size [m,n].
 
       Returns:
-            the index of lexico minimum.
+            the index of lexico minimum row.
       """
-      # TODO: can be improved, refer to https://stackoverflow.com/questions/13544476/how-to-find-max-and-min-in-array-using-minimum-comparisons
+      # TODO: can be improved for better efficiency, refer to https://stackoverflow.com/questions/13544476/how-to-find-max-and-min-in-array-using-minimum-comparisons
       if matrix.size == 0:
             raise ValueError("The input matrix is empty!")
       if len(matrix.shape) > 2:
