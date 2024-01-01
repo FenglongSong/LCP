@@ -35,9 +35,23 @@ class LinearComplementarityProblem:
         self.tableau[:, -1] = self.q
         
     def solve_with_lemke_method(self, max_itr:int=100, verbose:bool=False):
+        """ Use Lemke's algorithm to compute a solution to the LCP.
+
+        Returns:
+        
+        | exit_code | exit_string               | 
+        -----------------------------------------
+        |    0      | 'Solution Found'          |
+        |    1      | 'Ray Termination'         |
+        |    2      | 'Max Iterations Exceeded' |
+
+        """
+
         if all(self.q >= 0):
-            print("LCP solved!")
-            return self.q, np.zeros((self.n,1))
+            if verbose:
+                print('Solution Found.')
+            self.status = 0
+            return np.concatenate((self.q, np.zeros(self.n))), self.status
         else:
             self.initialize_tableau()
             # first pivot (the z0 column)                
