@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from utils import *
 
 class LinearComplementarityProblem:
     """
@@ -116,13 +117,62 @@ class LinearComplementarityProblem:
                 # compute the complementary index
                 next_entering_var_index = self.find_complementary_index(leaving_var_index)
 
-    
-    def lexico_argmin(self) -> int:
-        return NotImplementedError
+        # Exceed max iteration
+        if i == max_itr-1:
+            print("Max Iterations Exceeded.")
+            self.status = 2
+            return np.inf*np.ones(2*self.n), self.status
+        
+
+        q = self.tableau[:,-1]
+        wz = np.zeros(2*self.n)
+        for i in range(self.n):
+            wz[self.basic_var_indecies[i]] = q[i]
+        self.status = 0
+        return wz, self.status
+
+    def lexico_minimum_ratio_test(self, pivot_col_index) -> int:
+        ''' Find the row index of the lexico minimum of tableau. 
+        In non-degenerate case, just do minimum ratio test. 
+        Lexico minimum ratio test is only carried out in degenerate case.
+        '''
+
+        # If non-degenerate, just do minimum ratio test
+        # determine the next leaving variable (choose row)
+        ratios = np.ones(self.n)
+        q = self.tableau[:, -1]
+        for j in range(self.n):
+            if abs(self.tableau[j, pivot_col_index]) < self.zero_tol:
+                ratios[j] = np.inf
+            else:
+                ratios[j] = q[j] / self.tableau[j, pivot_col_index]
+
+        # deal with the negative ratios
+        for j in range(self.n):
+            if ratios[j] < 0:
+                ratios[j] = np.inf
+        
+        
+        # Test if there are multiple minimums in ratios (degenrate in q)
+        min_ratios = np.min(ratios)
+        min_count = np.count_nonzero(ratios == min_ratios)
+        if min_count == 1:
+            return np.argmin(ratios)
+        else:
+            tableau_basis_column = self.tableau[:, self.basic_var_indecies]
+            beta = np.linalg.inv(tableau_basis_column)
+            q_bar = np.reshape(beta @ q, (self.n,1))
+
+            q_bar_and_beta = np.hstack((q_bar, beta)) # [beta*q, beta]
+            c_bar_j = beta @ self.tableau[:, pivot_col_index]
+            positive_c_bar_j_index = list(np.where(c_bar_j > self.zero_tol)[0])
+            return lexico_argmin(q_bar_and_beta[positive_c_bar_j_index, :])
+
+
     
     def find_complementary_index(self, i:int) -> int:
         if i < 0 or i >= 2*self.n:
-            raise RuntimeError("No complementary index")
+            raise ValueError("No complementary index")
         if i <= self.n-1:
             return i + self.n
         else:
