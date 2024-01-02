@@ -123,7 +123,6 @@ class LinearComplementarityProblem:
             self.status = 2
             return np.inf*np.ones(2*self.n), self.status
         
-
         q = self.tableau[:,-1]
         wz = np.zeros(2*self.n)
         for i in range(self.n):
