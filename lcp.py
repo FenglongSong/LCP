@@ -17,7 +17,13 @@ class LinearComplementarityProblem:
         4: max iteration reached
 
     """
-    def __init__(self, M, q) -> None:
+    def __init__(self, M: np.ndarray, q: np.ndarray) -> None:
+        if M.shape[0] != M.shape[1]:
+            raise ValueError("M must be a square matrix!")
+        if q.size != M.shape[0]:
+            raise ValueError("Dimension inconsistency between M and q!")
+        q.reshape(q.size,)
+        
         self.M = M
         self.q = q
         self.n = q.shape[0]
@@ -177,7 +183,7 @@ class LinearComplementarityProblem:
         
     def find_variable_name(self, i:int) -> str:
         if i < 0 or i > 2*self.n:
-            raise RuntimeError("Out of bound")
+            raise ValueError("Out of bound")
         if i <= self.n-1:
             return 'w'+str(i+1)
         elif i <= 2*self.n-1:
