@@ -166,8 +166,6 @@ class LinearComplementarityProblem:
             c_bar_j = beta @ self.tableau[:, pivot_col_index]
             positive_c_bar_j_index = list(np.where(c_bar_j > self.zero_tol)[0])
             return lexico_argmin(q_bar_and_beta[positive_c_bar_j_index, :])
-
-
     
     def find_complementary_index(self, i:int) -> int:
         if i < 0 or i >= 2*self.n:
