@@ -101,7 +101,7 @@ class LinearComplementarityProblem:
                     self.status = 1
                     return np.inf*np.ones(2*self.n), self.status
 
-                pivot_row_index = np.argmin(ratios)
+                pivot_row_index = self.lexico_minimum_ratio_test(pivot_col_index)
                 leaving_var_index = self.basic_var_indecies[pivot_row_index]
 
                 if verbose:
