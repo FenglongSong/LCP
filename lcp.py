@@ -61,8 +61,8 @@ class LinearComplementarityProblem:
             if verbose:
                 print("Initial tablaeu is:\n", self.tableau)
                 print("\n------------------ Iteration", 0, "------------------")
-                print("Leaving variable is: ", self.find_variable_name(self.basic_var_indecies[pivot_row_index]))
                 print("Entering variable is: z0")
+                print("Leaving variable is: ", self.find_variable_name(self.basic_var_indecies[pivot_row_index]))
 
             next_entering_var_index = self.find_complementary_index(self.basic_var_indecies[pivot_row_index]) # You have to find the complementary index before executing the pivot function, because pivot overwrite the basis_var_index
             self.pivot(pivot_row_index, 2*self.n)
@@ -99,8 +99,8 @@ class LinearComplementarityProblem:
 
                 if verbose:
                     print("\n------------------ Iteration", i, "------------------")
-                    print("Leaving variable is: ", self.find_variable_name(self.basic_var_indecies[pivot_row_index]))
                     print("Entering variable is: ", self.find_variable_name(entering_var_index))
+                    print("Leaving variable is: ", self.find_variable_name(self.basic_var_indecies[pivot_row_index]))
 
                 self.pivot(pivot_row_index, entering_var_index)
 
