@@ -96,9 +96,10 @@ class LinearComplementarityProblem:
 
                 # if all the values in ratios are infinties, we can say it's a ray termination?
                 if all(ratios >= np.inf*np.ones(self.n)):
-                    print("Ray termination! The algorithm is not able to solve the problem!")
-                    self.status = 2
-                    return 
+                    if verbose:
+                        print("Ray termination.")
+                    self.status = 1
+                    return np.inf*np.ones(2*self.n), self.status
 
                 pivot_row_index = np.argmin(ratios)
                 leaving_var_index = self.basic_var_indecies[pivot_row_index]
