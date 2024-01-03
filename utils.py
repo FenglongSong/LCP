@@ -86,14 +86,13 @@ class HyperplaneRepresentation:
       def remove_redundant_constraints(self) -> None:
             """ Remove all the redundant constraints.
             
-            Reference:
-                  Section 2.20 of https://people.inf.ethz.ch/fukudak/Doc_pub/polyfaq220115c.pdf
+            Reference: Section 2.20 of https://people.inf.ethz.ch/fukudak/Doc_pub/polyfaq220115c.pdf
             
-            We want to test whether the subsystem of first m-1 inequalities Cx \leq d implies the last inequality s x \leq t. 
+            We want to test whether the subsystem of m-1 inequalities Cx \leq d implies the other one inequality s x \leq t. 
             If so, the inequality s x \leq t is redundant and can be removed from the system. A linear programming (LP) 
             formulation of this checking is rather straightforward:
 
-            f^* = max s^T x
+            f^* = max s x
                   s.t C x \leq d,
                       s x \leq t + 1
             Then the inequality s x \leq t is redundant if and only if the optimal value f^* is less than or equal to t.
@@ -123,7 +122,7 @@ class HyperplaneRepresentation:
                   x_opt = sol.value(x)
                   f_opt = s @ x_opt
                   if f_opt <= t: # redundant
-                        print("Found a redundant constraint ", s)
+                        # print("Found a redundant constraint ", s)
                         self.A = C
                         self.b = d
                         self.m -= 1
