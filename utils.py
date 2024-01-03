@@ -82,6 +82,7 @@ class HyperplaneRepresentation:
             self.b = b
             self.m = A.shape[0] # number of affine constraints
             self.n = A.shape[1] # number of dimension
+            self.H = np.hstack((A, np.reshape(b, (self.m, 1))))
 
       def remove_redundant_constraints(self) -> None:
             """ Remove all the redundant constraints.
@@ -135,3 +136,5 @@ class HyperplaneRepresentation:
                   # A very naive way to avoid dead cycle
                   if i >= 5000:
                         raise RuntimeError("Dead cycle.")
+                  
+            self.H = np.hstack((self.A, np.reshape(self.b, (self.m, 1))))
