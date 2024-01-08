@@ -53,7 +53,7 @@ class LinearComplementarityProblem:
 
         """
 
-        if all(self.q >= 0):
+        if all(self.q >= -self.zero_tol): # we take any value larger than -zero_tol as 0
             if verbose:
                 print('Solution Found.')
             self.status = 0
