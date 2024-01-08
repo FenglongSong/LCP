@@ -29,11 +29,11 @@ def is_lexico_positive(matrix: np.ndarray, zero_tol=1e-10) -> bool:
 		tmp_matrix = tmp_matrix[undetermined_row_indices, :]
 		col = tmp_matrix[:, j]
 		if (col > 0).all():
-				return True       # if all elements in this column is positive
+			return True       # if all elements in this column is positive
 		elif (col < 0).any():
-				return False      # if at least one element in this column is negative
+			return False      # if at least one element in this column is negative
 		else:
-				undetermined_row_indices = [i for i ,e in enumerate(col) if e == 0]     # ! maybe e==0 is not a good way
+			undetermined_row_indices = [i for i ,e in enumerate(col) if e == 0]     # ! maybe e==0 is not a good way
 
 	return False
 
@@ -64,8 +64,8 @@ def lexico_argmin(matrix: np.array, zero_tol=1e-10) -> int | list[int]:
 	for i in range(m):
 		a = matrix[i, :]
 		if is_lexico_positive(min - a):
-				argmin = i
-				min = a
+			argmin = i
+			min = a
 
 	return argmin
 
@@ -101,41 +101,41 @@ class HyperplaneRepresentation:
 		
 		i = 0
 		while True:
-				s = self.A[[i], :]
-				t = self.b[i]
+			s = self.A[[i], :]
+			t = self.b[i]
 
-				C = np.vstack((self.A[:i, :], self.A[i+1:, :]))
-				d = np.concatenate((self.b[:i], self.b[i+1:]))
+			C = np.vstack((self.A[:i, :], self.A[i+1:, :]))
+			d = np.concatenate((self.b[:i], self.b[i+1:]))
 
-				opti = ca.Opti()
-				x = opti.variable(self.n)
-				opti.subject_to(C @ x <= d)
-				opti.subject_to(s @ x <= t+1)
-				opti.minimize(-s@x)
+			opti = ca.Opti()
+			x = opti.variable(self.n)
+			opti.subject_to(C @ x <= d)
+			opti.subject_to(s @ x <= t+1)
+			opti.minimize(-s@x)
 
-				opts = {'ipopt.print_level':0, 'print_time':0, 'ipopt.tol':1e-8}
-				opti.solver('ipopt', opts)
+			opts = {'ipopt.print_level':0, 'print_time':0, 'ipopt.tol':1e-8}
+			opti.solver('ipopt', opts)
 
-				sol = opti.solve()
-				if not sol.stats()['success']:
-					raise RuntimeError("Ipopt failure.")
-				
-				x_opt = sol.value(x)
-				f_opt = s @ x_opt
-				if f_opt <= t + 1e-8: # redundant case:
-					# Add a small number to avoid numerical issue. Otherwise may cause issue
-					# when a redundant constraint is very close to a vertix.
-					self.A = C
-					self.b = d
-					self.m -= 1
-				else:                 # irredundant case:
-					i += 1
+			sol = opti.solve()
+			if not sol.stats()['success']:
+				raise RuntimeError("Ipopt failure.")
+			
+			x_opt = sol.value(x)
+			f_opt = s @ x_opt
+			if f_opt <= t + 1e-8: # redundant case:
+				# Add a small number to avoid numerical issue. Otherwise may cause issue
+				# when a redundant constraint is very close to a vertix.
+				self.A = C
+				self.b = d
+				self.m -= 1
+			else:                 # irredundant case:
+				i += 1
 
-				if i == self.m:
-					break
+			if i == self.m:
+				break
 
-				# A very naive way to avoid dead cycle
-				if i >= 5000:
-					raise RuntimeError("Dead cycle.")
+			# A very naive way to avoid dead cycle
+			if i >= 5000:
+				raise RuntimeError("Dead cycle.")
 				
 		self.H = np.hstack((self.A, np.reshape(self.b, (self.m, 1))))
