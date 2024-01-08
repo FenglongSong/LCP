@@ -139,3 +139,19 @@ class HyperplaneRepresentation:
 				raise RuntimeError("Dead cycle.")
 				
 		self.H = np.hstack((self.A, np.reshape(self.b, (self.m, 1))))
+
+
+class Polyhedron:
+	"""
+	Define the (convex) polyhedron.
+	"""
+
+	def __init__(self, reprenestation) -> None:
+		if isinstance(reprenestation, HyperplaneRepresentation):
+				self.Hrep = reprenestation
+				self.dim = reprenestation.n
+				self.H = reprenestation.H
+				self.A = reprenestation.A
+				self.b = reprenestation.b
+		else:
+				raise NotImplementedError
