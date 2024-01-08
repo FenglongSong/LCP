@@ -29,7 +29,7 @@ class LinearComplementarityProblem:
         self.n = q.shape[0]
         self.tableau = np.zeros([self.n, 2*self.n+2]) # [I, -M, -e, q]
         self.num_pivot_steps = 0
-        self.basic_var_indecies = [*range(0, self.n)]
+        self.basic_var_indices = [*range(0, self.n)]
         self.status = 0
         self.lexico_tol = 1e-6
         self.zero_tol = 1e-10
@@ -68,9 +68,9 @@ class LinearComplementarityProblem:
                 print("Initial tablaeu is:\n", self.tableau)
                 print("\n------------------ Iteration", 0, "------------------")
                 print("Entering variable is: z0")
-                print("Leaving variable is: ", self.find_variable_name(self.basic_var_indecies[pivot_row_index]))
+                print("Leaving variable is: ", self.find_variable_name(self.basic_var_indices[pivot_row_index]))
 
-            next_entering_var_index = self.find_complementary_index(self.basic_var_indecies[pivot_row_index]) # You have to find the complementary index before executing the pivot function, because pivot overwrite the basis_var_index
+            next_entering_var_index = self.find_complementary_index(self.basic_var_indices[pivot_row_index]) # You have to find the complementary index before executing the pivot function, because pivot overwrite the basis_var_index
             self.pivot(pivot_row_index, 2*self.n)
             if verbose:
                 print("The tableau after pivoting is: ")
@@ -102,12 +102,12 @@ class LinearComplementarityProblem:
                     return np.inf*np.ones(2*self.n), self.status
 
                 pivot_row_index = self.lexico_minimum_ratio_test(pivot_col_index)
-                leaving_var_index = self.basic_var_indecies[pivot_row_index]
+                leaving_var_index = self.basic_var_indices[pivot_row_index]
 
                 if verbose:
                     print("\n------------------ Iteration", i, "------------------")
                     print("Entering variable is: ", self.find_variable_name(entering_var_index))
-                    print("Leaving variable is: ", self.find_variable_name(self.basic_var_indecies[pivot_row_index]))
+                    print("Leaving variable is: ", self.find_variable_name(self.basic_var_indices[pivot_row_index]))
 
                 self.pivot(pivot_row_index, entering_var_index)
 
@@ -118,7 +118,7 @@ class LinearComplementarityProblem:
                 if leaving_var_index == 2*self.n: # z0 leaves, solution found
                     if verbose:
                         print("\nFeasible solution found!")
-                        print("basis is: ", self.basic_var_indecies)
+                        print("basis is: ", self.basic_var_indices)
                     break
 
                 # compute the complementary index
@@ -133,7 +133,7 @@ class LinearComplementarityProblem:
         q = self.tableau[:,-1]
         wz = np.zeros(2*self.n)
         for i in range(self.n):
-            wz[self.basic_var_indecies[i]] = q[i]
+            wz[self.basic_var_indices[i]] = q[i]
         self.status = 0
         return wz, self.status
 
@@ -165,7 +165,7 @@ class LinearComplementarityProblem:
         if min_count == 1:
             return np.argmin(ratios)
         else:
-            tableau_basis_column = self.tableau[:, self.basic_var_indecies]
+            tableau_basis_column = self.tableau[:, self.basic_var_indices]
             beta = np.linalg.inv(tableau_basis_column)
             q_bar = np.reshape(beta @ q, (self.n,1))
 
@@ -200,4 +200,4 @@ class LinearComplementarityProblem:
         for i in range(self.n):
             if i != pivot_row_index:
                 self.tableau[i, :] -= self.tableau[i, pivot_col_index] * self.tableau[pivot_row_index, :] 
-        self.basic_var_indecies[pivot_row_index] = pivot_col_index
+        self.basic_var_indices[pivot_row_index] = pivot_col_index
