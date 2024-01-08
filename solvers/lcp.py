@@ -31,7 +31,7 @@ class LinearComplementarityProblem:
         self.basic_var_indices = [*range(0, self.n)]
         self.status = -1  # -1 means unsolved (initial state)
         self.lexico_tol = 1e-6
-        self.zero_tol = 1e-10
+        self.zero_tol = 1e-8
 
     def initialize_tableau(self) -> None:
         n = self.n
