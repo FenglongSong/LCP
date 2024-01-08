@@ -1,6 +1,59 @@
 import numpy as np
 import casadi as ca
 
+def is_complementary_basis(indices: list, n: int) -> bool:
+	""" 
+	Tell if the current basis is a complementary basis.
+	"""
+	for i in range(n):
+		if indices[i] + n in indices:
+			return False
+		elif indices[i] - n in indices:
+			return False
+	return True
+
+# TODO: implement and test it
+def is_almost_complementary_basis(indices: list, n: int) -> bool:
+	""" 
+	Tell if the current basis is an almost complementary basis.
+	"""
+	return NotImplementedError
+
+
+class Basis:
+	"""
+    Define the basis of a Linear Complementarity Problem (LCP).
+    """
+	def __init__(self, indices: list[int], n: int) -> None:
+		# check if there are repeated elements in the indices list
+		if len(set(indices)) < len(indices):
+			raise ValueError("There are repeated elements in indices list.")
+		
+		# check if the elements of indices are within [0, 2n-1]
+		if np.any(np.array(indices) < 0) or np.any(np.array(indices) > 2*n-1):
+			raise ValueError("Invalid value in indices list.")
+		
+		self.n = n
+		self.indices = indices
+		
+	
+	def is_complementary_basis(self) -> bool:
+		""" 
+		Tell if the current basis is a complementary basis.
+        """
+		for i in range(self.n):
+			if self.indices[i] + self.n in self.indices:
+				return False
+			elif self.indices[i] - self.n in self.indices:
+				return False
+		return True
+	
+	# TODO: implement and test it
+	def is_almost_complementary_basis(self) -> bool:
+		return NotImplementedError
+	
+	
+
 def is_lexico_positive(matrix: np.ndarray, zero_tol=1e-10) -> bool:
 	""" Tell if a matrix or vector is lexico positive.
 	
