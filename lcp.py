@@ -10,11 +10,10 @@ class LinearComplementarityProblem:
     w^T z = 0.
 
     status:
-        0: unsolved (initial state)
-        1: feasible solution found
-        2: ray termination
-        3: infeasible
-        4: max iteration reached
+        -1: Unsolved (initial state)
+        0: Solution Found
+        1: Ray Termination
+        2: Max Iterations Exceeded
 
     """
     def __init__(self, M: np.ndarray, q: np.ndarray) -> None:
@@ -30,7 +29,7 @@ class LinearComplementarityProblem:
         self.tableau = np.zeros([self.n, 2*self.n+2]) # [I, -M, -e, q]
         self.num_pivot_steps = 0
         self.basic_var_indices = [*range(0, self.n)]
-        self.status = 0
+        self.status = -1  # -1 means unsolved (initial state)
         self.lexico_tol = 1e-6
         self.zero_tol = 1e-10
 
